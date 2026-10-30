@@ -6,7 +6,7 @@ import numpy as np
 # إعدادات الصفحة
 st.set_page_config(page_title="Well drilling location determination", page_icon="🌊", layout="wide")
 
-# تنسيق CSS مخصص للواجهات
+# تنسيق CSS مخصص للواجهات ولحل مشكلة انكماش القوائم على الهواتف
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
@@ -15,6 +15,12 @@ st.markdown("""
         direction: rtl;
         text-align: right;
     }
+    
+    /* تحسين القائمة الجانبية لضمان اتساعها على الهواتف الذكية */
+    [data-testid="stSidebar"] {
+        min-width: 280px !important;
+    }
+    
     .main-header {
         background-color: #d96b6b;
         color: white;
@@ -297,7 +303,7 @@ elif st.session_state.current_page == "export_reports":
     st.markdown("---")
     
     if "Excel" in export_format:
-        excel_data = df_export.to_csv(index=False).encode('utf-8-sig') # تحويل سلس لتصدير البيانات
+        excel_data = df_export.to_csv(index=False).encode('utf-8-sig')
         st.download_button(
             label="📥 تحميل التقرير بصيغة Excel / CSV",
             data=excel_data,
@@ -323,7 +329,6 @@ elif st.session_state.current_page == "export_reports":
         )
     elif "PDF" in export_format:
         st.info("📑 تقرير هندسي شامل يضم إحداثيات الآبار، أعماق المياه، والطبقات الحاملة جاهز للتصدير.")
-        # توليد محتوى نصي افتراضي للتقرير بصيغة PDF مبسطة للتحميل
         pdf_mock_data = df_export.to_string().encode('utf-8')
         st.download_button(
             label="📥 تحميل التقرير الهندسي بصيغة PDF",
